@@ -5,7 +5,34 @@ import { styles } from '../Components/generalStyle'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 
+const axios = require('axios').default
 class Login extends React.Component {
+  state = {
+    username: '',
+    password: '',
+  }
+
+  handleSubmit = () => {
+    const { history } = this.props
+    const { username, password } = this.state
+    axios.post('https://assignment-api.dev.witsawa.com/users/login', { username, password })
+      .then(function (response) {
+        console.log('success', response)
+        history.push({ pathname: '/main' })
+      })
+      .catch(function (error) {
+        console.log('error', error)
+      })
+  }
+
+  onChangeUser = (e) => {
+    this.setState({ username: e.target.value })
+  }
+
+  onChangePassword = (e) => {
+    this.setState({ password: e.target.value })
+  }
+
   render() {
 
     const validateMessages = {
@@ -15,14 +42,10 @@ class Login extends React.Component {
       }
     }
 
-    const onFinish = values => {
-      console.log('Received values of form: ', values);
-    }
-
     return (
       <div style={{ ...styles.background }}>
         <div style={{ ...styles.centerBackground }}>
-          <Form style={{ width: '100%', padding: '40px' }} onFinish={onFinish} validateMessages={validateMessages}>
+          <Form style={{ width: '100%', padding: '40px' }} onFinish={this.handleSubmit} validateMessages={validateMessages}>
             <div style={{ ...styles.textCenter, marginBottom: '8px' }}>Login</div>
             <Form.Item
               name='username'
@@ -32,7 +55,11 @@ class Login extends React.Component {
                   message: 'Please input your Username',
                 }
               ]}>
-              <Input style={{}} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                placeholder="Username"
+                onChange={value => this.onChangeUser(value)}
+              />
             </Form.Item>
             <Form.Item
               name='password'
@@ -46,16 +73,17 @@ class Login extends React.Component {
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Password"
+                onChange={value => this.onChangePassword(value)}
               />
             </Form.Item>
             <Form.Item>
-              <Button style={{ ...styles.buttonLogin }} type="primary" htmlType="submit" className="login-form-button">
+              <Button style={{ ...styles.buttonLogin }} type="primary" htmlType="submit">
                 Log in
               </Button>
             </Form.Item>
             <div style={{ ...styles.registerLabel }}>
-              Not a member? 
-              <Link style={{paddingLeft:'3px'}} to={{pathname: '/register'}}>register now!</Link>
+              Not a member?
+              <Link style={{ paddingLeft: '3px' }} to={{ pathname: '/register' }}>register now!</Link>
             </div>
           </Form>
         </div>
