@@ -3,6 +3,7 @@ import { Form, Input, Button } from 'antd'
 import 'antd/dist/antd.css'
 import { styles } from '../Components/generalStyle'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { Link } from 'react-router-dom'
 
 class Login extends React.Component {
   render() {
@@ -41,7 +42,7 @@ class Login extends React.Component {
                   message: 'Please input your password',
                 }
               ]}>
-              <Input
+              <Input.Password
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Password"
@@ -53,7 +54,8 @@ class Login extends React.Component {
               </Button>
             </Form.Item>
             <div style={{ ...styles.registerLabel }}>
-              Not a member? <a style={{paddingLeft:'3px'}}>register now!</a>
+              Not a member? 
+              <Link style={{paddingLeft:'3px'}} to={{pathname: '/register'}}>register now!</Link>
             </div>
           </Form>
         </div>

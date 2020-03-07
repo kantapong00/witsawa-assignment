@@ -8,8 +8,8 @@ export const styles = {
   },
   centerBackground: {
     display: 'flex',
-    width: '25%',
-    height: '300px',
+    width: '30%',
+    height: '350px',
     borderRadius: '5px',
     justifyContent: 'center',
     alignItems: 'center',
