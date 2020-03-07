@@ -44,48 +44,50 @@ class Login extends React.Component {
 
     return (
       <div style={{ ...styles.background }}>
-        <div style={{ ...styles.centerBackground }}>
-          <Form style={{ width: '100%', padding: '40px' }} onFinish={this.handleSubmit} validateMessages={validateMessages}>
-            <div style={{ ...styles.textCenter, marginBottom: '8px' }}>Login</div>
-            <Form.Item
-              name='username'
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your Username',
-                }
-              ]}>
-              <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Username"
-                onChange={value => this.onChangeUser(value)}
-              />
-            </Form.Item>
-            <Form.Item
-              name='password'
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your password',
-                }
-              ]}>
-              <Input.Password
-                prefix={<LockOutlined className="site-form-item-icon" />}
-                type="password"
-                placeholder="Password"
-                onChange={value => this.onChangePassword(value)}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button style={{ ...styles.buttonLogin }} type="primary" htmlType="submit">
-                Log in
+        <div style={{ ...styles.center }}>
+          <div style={{ ...styles.centerBackground }}>
+            <Form style={{ width: '100%', padding: '40px' }} onFinish={this.handleSubmit} validateMessages={validateMessages}>
+              <div style={{ ...styles.textCenter, marginBottom: '8px' }}>Login</div>
+              <Form.Item
+                name='username'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your Username',
+                  }
+                ]}>
+                <Input
+                  prefix={<UserOutlined className="site-form-item-icon" />}
+                  placeholder="Username"
+                  onChange={value => this.onChangeUser(value)}
+                />
+              </Form.Item>
+              <Form.Item
+                name='password'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your password',
+                  }
+                ]}>
+                <Input.Password
+                  prefix={<LockOutlined className="site-form-item-icon" />}
+                  type="password"
+                  placeholder="Password"
+                  onChange={value => this.onChangePassword(value)}
+                />
+              </Form.Item>
+              <Form.Item>
+                <Button style={{ ...styles.buttonLogin }} type="primary" htmlType="submit">
+                  Log in
               </Button>
-            </Form.Item>
-            <div style={{ ...styles.registerLabel }}>
-              Not a member?
+              </Form.Item>
+              <div style={{ ...styles.registerLabel }}>
+                Not a member?
               <Link style={{ paddingLeft: '3px' }} to={{ pathname: '/register' }}>register now!</Link>
-            </div>
-          </Form>
+              </div>
+            </Form>
+          </div>
         </div>
       </div>
     )
