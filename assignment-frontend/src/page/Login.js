@@ -8,19 +8,21 @@ import { Link } from 'react-router-dom'
 const axios = require('axios').default
 class Login extends React.Component {
   state = {
+    id: '',
     username: '',
     password: '',
   }
 
   handleSubmit = () => {
     const { history } = this.props
-    const { username, password } = this.state
+    const { username, password, id } = this.state
     axios.post('https://assignment-api.dev.witsawa.com/users/login', { username, password })
-      .then(function (response) {
+      .then(response => {
         console.log('success', response)
-        history.push({ pathname: '/main' })
+        this.setState({id: response.data._id})
+        history.push({ pathname: '/main', state: {...this.state} })
       })
-      .catch(function (error) {
+      .catch(error => {
         console.log('error', error)
       })
   }
@@ -34,19 +36,11 @@ class Login extends React.Component {
   }
 
   render() {
-
-    const validateMessages = {
-      types: {
-        username: 'Please input username',
-        password: 'Please input password',
-      }
-    }
-
     return (
       <div style={{ ...styles.background }}>
         <div style={{ ...styles.center }}>
           <div style={{ ...styles.centerBackground }}>
-            <Form style={{ width: '100%', padding: '40px' }} onFinish={this.handleSubmit} validateMessages={validateMessages}>
+            <Form style={{ width: '100%', padding: '40px' }} onFinish={this.handleSubmit}>
               <div style={{ ...styles.textCenter, marginBottom: '8px' }}>Login</div>
               <Form.Item
                 name='username'

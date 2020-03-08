@@ -67,10 +67,10 @@ export const styles = {
     backgroundColor:'rgba(230, 230, 230, 0.4)', 
     width:'100%', 
     height:'2px', 
-    marginTop: 50
+    marginTop: '24px'
   },
   settingIcon: {
-    color: '#19efb6', 
+    color: '#25e7b1', 
     fontSize: '18px', 
     flex: 1, 
     justifyContent: 'flex-end', 
@@ -78,7 +78,22 @@ export const styles = {
   },
   headerText: {
     fontFamily: 'Sukhumvit Set',
-    color: '#19efb6', 
+    color: '#25e7b1', 
+    fontWeight: 600, 
+    fontSize: '22px'
+  },
+  incomeBtn: {
+    backgroundColor: '#25e7b1', 
+    borderColor: '#25e7b1',
+    width: '115px'
+  },
+  expenseBtn: {
+    backgroundColor: '#de4d3a', 
+    borderColor: '#de4d3a',
+    width: '115px'
+  },
+  modalHeaderText: {
+    fontFamily: 'Sukhumvit Set',
     fontWeight: 600, 
     fontSize: '22px'
   }
