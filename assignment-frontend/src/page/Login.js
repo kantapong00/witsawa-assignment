@@ -15,7 +15,7 @@ class Login extends React.Component {
 
   handleSubmit = () => {
     const { history } = this.props
-    const { username, password, id } = this.state
+    const { username, password } = this.state
     axios.post('https://assignment-api.dev.witsawa.com/users/login', { username, password })
       .then(response => {
         console.log('success', response)

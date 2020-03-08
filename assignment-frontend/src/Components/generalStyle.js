@@ -3,7 +3,7 @@ export const styles = {
     flex: 1,
     display: 'flex',
     height: '-webkit-fill-available',
-    backgroundColor: '#E6E6E6',
+    backgroundColor: '#f0f2f5',
   },
   centerBackground: {
     display: 'flex',
@@ -96,5 +96,14 @@ export const styles = {
     fontFamily: 'Sukhumvit Set',
     fontWeight: 600, 
     fontSize: '22px'
+  },
+  editIcon: {
+    fontSize: '16px', 
+    paddingRight: '16px', 
+    color: '#25e7b1'
+  },
+  deleteIcon: {
+    fontSize: '16px', 
+    color: '#de4d3a'
   }
 }

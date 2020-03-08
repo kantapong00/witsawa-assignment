@@ -5,7 +5,6 @@ import { lebleRedStar } from './basicComponent'
 import moment from 'moment'
 
 export default class MyModal extends React.Component {
-
   onChangeDate = (value) => {
     const { parentSetter } = this.props
     const selectedDate = moment(value).format('YYYY-MM-DD')
