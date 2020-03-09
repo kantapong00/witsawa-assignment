@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Layout, Table, Input, Form, DatePicker, InputNumber, Modal } from 'antd'
+import { Button, Layout, Table, Input, Form, DatePicker, InputNumber, Modal, Spin, message } from 'antd'
 import 'antd/dist/antd.css'
 import { styles } from '../Components/generalStyle'
 import { SettingOutlined, EditOutlined, DeleteFilled, CheckOutlined, CloseOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
@@ -23,6 +23,7 @@ class Main extends React.Component {
     description: '',
     onEdit: false,
     isLoad: false,
+    isLoadPage: false,
     selectedID: null
   }
 
@@ -30,7 +31,7 @@ class Main extends React.Component {
     this.getTransactionByUserId()
   }
 
-  UNSAFE_componentWillUpdate(nextState) {
+  UNSAFE_componentWillUpdate(nextProps, nextState) {
     if (nextState.isLoad !== this.state.isLoad) {
       this.getTransactionByUserId()
       this.setState({ isLoad: nextState.isLoad })
@@ -41,7 +42,7 @@ class Main extends React.Component {
     const { userId } = this.state
     await axios.get(`https://assignment-api.dev.witsawa.com/transactions?user=${userId}`)
       .then(response => {
-        this.setState({ transactions: response.data })
+        this.setState({ transactions: response.data, isLoadPage: true })
       })
       .catch(e => {
         console.log(e)
@@ -51,9 +52,9 @@ class Main extends React.Component {
   handleSubmit = () => {
     const { date, amount, description, userId, type, isLoad } = this.state
     axios.post('https://assignment-api.dev.witsawa.com/transactions', { user: userId, date, amount, type, remark: description })
-      .then((response, resolve, reject) => {
-        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
-        this.setState({ visible: false, confirmLoading: false, isLoad: !isLoad })
+      .then(() => {
+        this.setState({ visible: false, isLoad: !isLoad })
+        message.success('Create transaction successful')
       })
       .catch(function (error) {
         console.log('error', error)
@@ -66,6 +67,7 @@ class Main extends React.Component {
     axios.put(`https://assignment-api.dev.witsawa.com/transactions/${selectedID}`, { ...newData })
       .then(response => {
         this.setState({ onClickEdit: false, selectedID: null })
+        message.success('Edit transaction successful')
       })
       .catch(function (error) {
         console.log('error', error)
@@ -76,6 +78,7 @@ class Main extends React.Component {
     axios.delete(`https://assignment-api.dev.witsawa.com/transactions/${id}`)
       .then(response => {
         this.setState({ onClickEdit: false, selectedID: null })
+        message.success('Delete transaction successful')
       })
       .catch(function (error) {
         console.log('error', error)
@@ -161,7 +164,6 @@ class Main extends React.Component {
                 <div>
                   <DatePicker
                     defaultValue={moment(text)}
-                    style={{ width: '236px' }}
                     onChange={(date, value) => this.onChangeDate(date, value, index)}
                   />
                 </div>}
@@ -236,8 +238,7 @@ class Main extends React.Component {
         }
       }
     ]
-    const { visible, confirmLoading, type, transactions, onClickEdit } = this.state
-    console.log('state', this.state)
+    const { visible, confirmLoading, type, transactions, onClickEdit, isLoadPage } = this.state
     return (
       <div style={{ ...styles.background }}>
         <Layout style={{ flex: 1, display: 'table' }}>
@@ -270,7 +271,9 @@ class Main extends React.Component {
             </div>
             <div style={{ ...styles.line }} />
             <Form>
-              <Table dataSource={transactions} columns={columns} rowKey="_id" />
+              {isLoadPage === true ?
+                <Table dataSource={transactions} columns={columns} rowKey="_id" />
+                : <div style={{ ...styles.loading }}><Spin size="large" /></div>}
             </Form>
           </Content>
         </Layout>

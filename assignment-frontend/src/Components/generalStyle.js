@@ -105,5 +105,11 @@ export const styles = {
   deleteIcon: {
     fontSize: '16px', 
     color: '#de4d3a'
+  },
+  loading: {
+    height: '50vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 }
