@@ -10,7 +10,7 @@ import _ from 'lodash'
 
 const { confirm } = Modal
 const axios = require('axios').default
-const { Header, Content } = Layout;
+const { Header, Content } = Layout
 class Main extends React.Component {
   state = {
     visible: false,
@@ -66,7 +66,7 @@ class Main extends React.Component {
     const { selectedID, transactions } = this.state
     const newData = _.find(transactions, { '_id': id })
     axios.put(`https://assignment-api.dev.witsawa.com/transactions/${selectedID}`, { ...newData })
-      .then(response => {
+      .then(() => {
         this.setState({ onClickEdit: false, selectedID: null })
         message.success('Edit transaction successful')
       })
@@ -78,7 +78,7 @@ class Main extends React.Component {
   onDelete = (id) => {
     const { isLoad } = this.state
     axios.delete(`https://assignment-api.dev.witsawa.com/transactions/${id}`)
-      .then(response => {
+      .then(() => {
         this.setState({ onClickEdit: false, selectedID: null, isLoad: !isLoad })
         message.success('Delete transaction successful')
       })

@@ -18,9 +18,8 @@ class Login extends React.Component {
     const { username, password } = this.state
     axios.post('https://assignment-api.dev.witsawa.com/users/login', { username, password })
       .then(response => {
-        console.log('success', response)
-        this.setState({id: response.data._id})
-        history.push({ pathname: '/main', state: {...this.state} })
+        this.setState({ id: response.data._id })
+        history.push({ pathname: '/main', state: { ...this.state } })
       })
       .catch(error => {
         console.log('error', error)
