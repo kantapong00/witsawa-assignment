@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Layout, Table, Input, Form, DatePicker, InputNumber, Modal, Spin, message } from 'antd'
+import { Button, Layout, Table, Input, Form, DatePicker, InputNumber, Modal, Spin, message, Menu, Dropdown } from 'antd'
 import 'antd/dist/antd.css'
 import { styles } from '../Components/generalStyle'
 import { SettingOutlined, EditOutlined, DeleteFilled, CheckOutlined, CloseOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
@@ -24,7 +24,8 @@ class Main extends React.Component {
     onEdit: false,
     isLoad: false,
     isLoadPage: false,
-    selectedID: null
+    selectedID: null,
+    sortDate: false
   }
 
   UNSAFE_componentWillMount() {
@@ -75,9 +76,10 @@ class Main extends React.Component {
   }
 
   onDelete = (id) => {
+    const { isLoad } = this.state
     axios.delete(`https://assignment-api.dev.witsawa.com/transactions/${id}`)
       .then(response => {
-        this.setState({ onClickEdit: false, selectedID: null })
+        this.setState({ onClickEdit: false, selectedID: null, isLoad: !isLoad })
         message.success('Delete transaction successful')
       })
       .catch(function (error) {
@@ -86,20 +88,29 @@ class Main extends React.Component {
   }
 
   showConfirm = (id) => {
-    const { isLoad } = this.state
     confirm({
       title: 'Do you want to delete these items?',
       icon: <ExclamationCircleOutlined />,
-      content: 'When clicked the OK button, this dialog will be closed after 1 second',
+      okType: 'danger',
       onOk: () => {
         return new Promise((resolve, reject) => {
           this.onDelete(id)
-          this.setState({ isLoad: !isLoad })
           setTimeout(Math.random() > 0.5 ? resolve : reject, 100)
         }).catch((err) => console.log('Oops errors!', err))
       },
       onCancel() { },
     })
+  }
+
+  sortByDate = () => {
+    const { transactions } = this.state
+    const sortTransaction = _.sortBy(transactions, ['date'])
+    this.setState({ transactions: sortTransaction, sortDate: true })
+  }
+
+  sortByLastUpdate = () => {
+    this.setState({ sortDate: false })
+    this.getTransactionByUserId()
   }
 
   showModalIncome = () => {
@@ -178,7 +189,7 @@ class Main extends React.Component {
         render: (text, record, index) => {
           return (
             <div>
-              {record._id !== selectedID ? <div>{text}</div>
+              {record._id !== selectedID ? <div>{text ? text : '-'}</div>
                 :
                 <div>
                   <Input
@@ -238,41 +249,80 @@ class Main extends React.Component {
         }
       }
     ]
-    const { visible, confirmLoading, type, transactions, onClickEdit, isLoadPage } = this.state
+    const config = {
+      pagination: {
+        showSizeChanger: true,
+      }
+    }
+    const menu = (
+      <Menu>
+        <Menu.Item>
+          <a href='/'>
+            Logout
+          </a>
+        </Menu.Item>
+      </Menu>
+    )
+    const { visible, confirmLoading, type, transactions, onClickEdit, isLoadPage, sortDate } = this.state
     return (
       <div style={{ ...styles.background }}>
         <Layout style={{ flex: 1, display: 'table' }}>
           <Header style={{ ...styles.headerStyle }}>
             <div style={{ ...styles.headerText }}>Income and Expense Recording</div>
-            <SettingOutlined style={{ ...styles.settingIcon }} />
+            <Dropdown overlay={menu}>
+              <div>
+                <SettingOutlined style={{ ...styles.settingIcon }} />
+              </div>
+            </Dropdown >
           </Header>
           <Content style={{ ...styles.contentBackground }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', flexDirection: 'row', paddingTop: '24px' }}>
-              <div style={{ paddingRight: '16px' }}>
-                <Button
-                  type="primary"
-                  size='large'
-                  style={{ ...styles.normalText, ...styles.incomeBtn }}
-                  onClick={this.showModalIncome}
-                >
-                  Income
+            <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+              <div style={{ paddingLeft: '24px', display: 'flex', alignItems: 'flex-end' }}>
+                {sortDate !== true ?
+                  <Button
+                    type="dashed"
+                    size='large'
+                    style={{ ...styles.normalText, color: '#61c092', borderColor: '#61c092' }}
+                    onClick={this.sortByDate}
+                  >
+                    Sort by date
                 </Button>
+                  : <Button
+                    type="dashed"
+                    size='large'
+                    style={{ ...styles.normalText, color: '#61c092', borderColor: '#61c092' }}
+                    onClick={this.sortByLastUpdate}
+                  >
+                    last update
+              </Button>}
               </div>
-              <div style={{ paddingRight: '24px' }}>
-                <Button
-                  type="primary"
-                  size='large'
-                  style={{ ...styles.normalText, ...styles.expenseBtn }}
-                  onClick={this.showModalExpense}
-                >
-                  Expense
+              <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '24px' }}>
+                <div style={{ paddingRight: '16px' }}>
+                  <Button
+                    type="primary"
+                    size='large'
+                    style={{ ...styles.normalText, ...styles.incomeBtn }}
+                    onClick={this.showModalIncome}
+                  >
+                    Income
                 </Button>
+                </div>
+                <div style={{ paddingRight: '24px' }}>
+                  <Button
+                    type="primary"
+                    size='large'
+                    style={{ ...styles.normalText, ...styles.expenseBtn }}
+                    onClick={this.showModalExpense}
+                  >
+                    Expense
+                </Button>
+                </div>
               </div>
             </div>
             <div style={{ ...styles.line }} />
             <Form>
               {isLoadPage === true ?
-                <Table dataSource={transactions} columns={columns} rowKey="_id" />
+                <Table dataSource={transactions} columns={columns} {...config} rowKey="_id" />
                 : <div style={{ ...styles.loading }}><Spin size="large" /></div>}
             </Form>
           </Content>

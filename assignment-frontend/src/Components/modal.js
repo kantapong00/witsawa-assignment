@@ -27,11 +27,12 @@ export default class MyModal extends React.Component {
         <Modal
           title={this.props.titleText}
           closable={false}
+          destroyOnClose
           footer={null}
           visible={this.props.visible}
           confirmLoading={this.props.confirmLoading}
         >
-          <Form style={{ width: '100%' }} onFinish={this.handleSubmit}>
+          <Form style={{ width: '100%' }} onFinish={this.props.handleOk}>
             {lebleRedStar('Date', true)}
             <Form.Item name='date' rules={[{ required: true, message: 'Please select date' }]}>
               <DatePicker
@@ -60,7 +61,7 @@ export default class MyModal extends React.Component {
               <Button
                 style={{ ...styles.incomeBtn }}
                 size='large'
-                onClick={this.props.handleOk}
+                htmlType="submit"
                 type="primary"
               >
                 {this.props.handleOkText}

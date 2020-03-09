@@ -8,16 +8,14 @@ const axios = require('axios').default
 class Register extends React.Component {
   state = {
     username: '',
-    password: '',
-    confirmPassword: ''
+    password: ''
   }
 
   handleSubmit = () => {
     const { history } = this.props
     const { username, password } = this.state
     axios.post('https://assignment-api.dev.witsawa.com/users', { username, password })
-      .then(function (response) {
-        console.log('success', response)
+      .then(() => {
         history.push({ pathname: '/' })
       })
       .catch(function (error) {
@@ -33,22 +31,12 @@ class Register extends React.Component {
     this.setState({ password: e.target.value })
   }
 
-  onConfirmPassword = (e) => {
-    this.setState({ confirmPassword: e.target.value })
-  }
-
   render() {
-    const validateMessages = {
-      types: {
-        username: 'Please input username',
-        password: 'Please input password',
-      }
-    }
     return (
       <div style={{ ...styles.background }}>
         <div style={{ ...styles.center }}>
           <div style={{ ...styles.centerBackground }}>
-            <Form style={{ width: '100%', padding: '40px' }} onFinish={this.handleSubmit} validateMessages={validateMessages}>
+            <Form style={{ width: '100%', padding: '40px' }} onFinish={this.handleSubmit}>
               <div style={{ ...styles.textCenter, marginBottom: '8px' }}>Register</div>
               <Form.Item
                 name='username'
@@ -65,15 +53,6 @@ class Register extends React.Component {
                   type="password"
                   placeholder="Password"
                   onChange={value => this.onChangePassword(value)}
-                />
-              </Form.Item>
-              <Form.Item
-                name='confirm'
-                rules={[{ required: true, message: 'Please confirm your password' }]}>
-                <Input.Password
-                  type="password"
-                  placeholder="Confirm Password"
-                  onChange={value => this.onConfirmPassword(value)}
                 />
               </Form.Item>
               <Form.Item>

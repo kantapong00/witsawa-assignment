@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button, message } from 'antd'
 import 'antd/dist/antd.css'
 import { styles } from '../Components/generalStyle'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
@@ -24,6 +24,7 @@ class Login extends React.Component {
       })
       .catch(error => {
         console.log('error', error)
+        message.error('Fail! wrong username and password')
       })
   }
 

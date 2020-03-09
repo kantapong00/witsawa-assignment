@@ -61,6 +61,7 @@ export const styles = {
   },
   headerStyle: {
     display: 'flex',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   line: {
